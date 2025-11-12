@@ -16,6 +16,7 @@
             </span>
           </template>
           <a-menu-item key="/user">用户列表</a-menu-item>
+          <a-menu-item key="/test">测试列表</a-menu-item>
         </a-sub-menu>
       </a-menu>
     </a-layout-sider>
