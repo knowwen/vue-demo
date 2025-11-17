@@ -59,11 +59,15 @@
           }
         )
         .then((token) => {
-          console.log("token:",token);
+          const getToken = token ;
+          console.log("getToken:",getToken);
+        })
+        .catch((error) => {
+          console.error('获取令牌时出错:', error);//获取令牌时出错:
         });
-        console.log("oauth2Token:",oauth2Token);
-      }).then((error) => {
-        console.error('获取授权URI时出错:', error);
+      })
+      .catch((error) => {
+        console.error('获取授权URI时出错:', error);//获取授权URI时出错:undefined
       });
     } 
     const login = async () => {
@@ -80,9 +84,9 @@
                 router.push({ name: 'Home' })// 登录成功后跳转到首页
             } 
         } catch (error) {
-            ElMessage.error('登录失败，请检查用户名和密码')
+          ElMessage.error('登录失败，请检查用户名和密码')
         } finally {
-            loading.value = false
+          loading.value = false
         }
     }
 </script>
