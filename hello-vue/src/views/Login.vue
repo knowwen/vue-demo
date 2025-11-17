@@ -30,37 +30,41 @@
 
     function oauth2_login(){
       const codeVerifier = async () => generateCodeVerifier();
-      const url = async () => 
+      let url;
       client.authorizationCode.getAuthorizeUri({
         redirectUri: 'http://localhost:5173/',
         state: '12345',
-        codeVerifier,
+        // codeVerifier,
         scope: ['openid','profile','user'],
+      })
+      .then((uri) => {
+        console.log('重定向到授权URI:', uri);
+        window.location.href = uri; // 重定向用户到授权URI
+        const oauth2Token = client.authorizationCode.getTokenFromCodeRedirect(
+          uri,
+          {
+            /**
+             * The redirect URI is not actually used for any redirects, but MUST be the
+             * same as what you passed earlier to "authorizationCode"
+             */
+            redirectUri: 'http://localhost:5173/',
+            /**
+             * This is optional, but if it's passed then it also MUST be the same as
+             * what you passed in the first step.
+             *
+             * If set, it will verify that the server sent the exact same state back.
+             */
+            state: '12345',
+            // codeVerifier,
+          }
+        )
+        .then((token) => {
+          console.log("token:",token);
+        });
+        console.log("oauth2Token:",oauth2Token);
+      }).then((error) => {
+        console.error('获取授权URI时出错:', error);
       });
-      const oauth2Token = async () => { client.authorizationCode.getTokenFromCodeRedirect(
-        url,
-        {
-          /**
-           * The redirect URI is not actually used for any redirects, but MUST be the
-           * same as what you passed earlier to "authorizationCode"
-           */
-          redirectUri: 'http://localhost:5173/',
-          /**
-           * This is optional, but if it's passed then it also MUST be the same as
-           * what you passed in the first step.
-           *
-           * If set, it will verify that the server sent the exact same state back.
-           */
-          state: 'some-string',
-          codeVerifier,
-        }
-      )};
-      // .then((uri) => {
-      //   console.log('重定向到授权URI:', uri);
-      //   window.location.href = uri; // 重定向用户到授权URI
-      // }).then((error) => {
-      //   console.error('获取授权URI时出错:', error);
-      // });
     } 
     const login = async () => {
         loading.value = true 
